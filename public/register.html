@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RestoView - Sign Up</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/materialize.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header></header>
+
+    <main>
+      <section class="container">
+        <h3 class="text-center">Sign Up</h3>
+        <div class="row">
+          <div class="col s12 offset-m1 m10 offset-l2 l8">
+            <form id="registerForm" class="card">
+              <div class="card-content">
+                <div class="input-field">
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    class="validate counter"
+                    minlength="3"
+                    maxlength="40"
+                    data-length="40"
+                    required
+                  />
+                  <label for="username">Username</label>
+                  <span class="helper-text" data-error="Required"></span>
+                </div>
+                <div class="input-field">
+                  <input
+                    type="text"
+                    name="firstName"
+                    id="firstName"
+                    class="validate"
+                    data-length="20"
+                    required
+                  />
+                  <label for="firstName">First Name</label>
+                  <span class="helper-text" data-error="Required"></span>
+                </div>
+                <div class="input-field">
+                  <input
+                    type="text"
+                    name="lastName"
+                    id="lastName"
+                    class="validate"
+                    data-length="20"
+                    required
+                  />
+                  <label for="lastName">Last Name</label>
+                  <span class="helper-text" data-error="Required"></span>
+                </div>
+                <div class="input-field">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="validate"
+                    data-length="256"
+                    required
+                  />
+                  <label for="email">Email</label>
+                  <span
+                    class="helper-text"
+                    data-error="Please input a valid email"
+                    data-success="Email is valid"
+                    >Please input a valid email</span
+                  >
+                </div>
+                <div class="input-field">
+                  <input
+                    type="tel"
+                    name="contactNo"
+                    id="contactNo"
+                    pattern="[0-9]{8}"
+                    class="validate"
+                    data-length="8"
+                    required
+                  />
+                  <label for="contactNo">Contact Number</label>
+                  <span
+                    class="helper-text"
+                    data-error="Please insert an 8-digit phone number"
+                    data-success="Contact number is valid"
+                    >Please insert an 8-digit phone number</span
+                  >
+                </div>
+                <div class="input-field">
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    class="validate"
+                    minlength="8"
+                    required
+                  />
+                  <label for="password">Password</label>
+                  <span class="helper-text" data-error="Required"></span>
+                </div>
+                <div class="input-field">
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    class="validate"
+                    minlength="8"
+                    required
+                  />
+                  <label for="confirmPassword">Confirm Password</label>
+                  <span class="helper-text" data-error="Required"></span>
+                </div>
+                <div class="input-field">
+                  <div>
+                    <label>Gender</label>
+                  </div>
+                  <div>
+                    <label>
+                      <input type="radio" name="gender" value="male" />
+                      <span>Male</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="gender" value="female" />
+                      <span>Female</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="gender" checked />
+                      <span>Others</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="file-field input-field">
+                  <div class="row valign-wrapper">
+                    <div class="file-path-wrapper input-field col s9">
+                      <input
+                        class="file-path"
+                        type="text"
+                        id="profilePicPath"
+                      />
+                      <label for="profilePicPath">Profile Picture</label>
+                    </div>
+                    <div class="col s3">
+                      <div class="cyan lighten-2 btn-small hoverable right">
+                        <span>
+                          Upload
+                          <i class="material-icons right">upload</i>
+                        </span>
+                        <input type="file" name="profilePic" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <a href="/login">Already have an account?</a>
+              </div>
+              <div class="card-action">
+                <button class="waves-effect waves-pink btn-flat" type="submit">
+                  sign up
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer></footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script src="/js/register.js"></script>
+    <script src="/js/script.js"></script>
+  </body>
+</html>

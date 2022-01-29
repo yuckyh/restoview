@@ -1,0 +1,59 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+body > footer {
+  margin-top: auto;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.file-field {
+  margin-top: 2rem;
+}
+
+.file-field input.file-path {
+  width: 100%;
+}
+
+.file-field .file-path-wrapper {
+  overflow: visible;
+}
+
+.file-field > .btn.right ~ .file-path-wrapper,
+.file-field > .btn-small.right ~ .file-path-wrapper,
+.file-field > .btn-large.right ~ .file-path-wrapper {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.user-view .background img {
+  filter: brightness(75%);
+}
+
+.waves-effect.waves-pink .waves-ripple {
+  background-color: rgba(233, 30, 90, 0.65);
+}
+
+#restaurantDetails img {
+  object-fit: cover;
+  width: 100%;
+  height: 300px;
+}
+
+#loginForm .card-action,
+#registerForm .card-action {
+  text-align: center;
+}

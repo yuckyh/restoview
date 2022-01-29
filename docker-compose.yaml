@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql
+    restart: always
+    env_file: .env.prod
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+      MYSQL_DATABASE: $DB_NAME
+    ports:
+      - 3306:3306
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+      - ./db/backup/files/:/data_backup/data
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: yuckyh/restoview
+    ports:
+      - 80:80
+    depends_on:
+      - mysqldb
+    stdin_open: true
+    tty: true
+
+volumes:
+  db-config:
+  db-data:

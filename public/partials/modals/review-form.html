@@ -1,0 +1,47 @@
+<form id="{{ action }}ReviewForm" class="modal">
+  <div class="modal-content">
+    <div class="row">
+      <h4 class="capitalize">{{ action }} Review</h4>
+      <div class="input-field col s12">
+        <span>Rating</span>
+        <div class="rating-input">
+          <label>
+            <input type="checkbox" name="rating" value="1" />
+            <i class="material-icons">star_rate</i>
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="2" />
+            <i class="material-icons">star_rate</i>
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="3" />
+            <i class="material-icons">star_rate</i>
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="4" />
+            <i class="material-icons">star_rate</i>
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="5" />
+            <i class="material-icons">star_rate</i>
+          </label>
+        </div>
+      </div>
+      <div class="input-field col s12">
+        <textarea
+          name="content"
+          id="content"
+          class="materialize-textarea"
+        ></textarea>
+        <label for="content">Content</label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="modal-close pink-text lighten-1 waves-effect waves-pink btn-flat"
+    >
+      {{ action }}<i class="material-icons right">{{ action }}</i>
+    </button>
+  </div>
+</form>

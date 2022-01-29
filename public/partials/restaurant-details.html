@@ -1,0 +1,17 @@
+<div class="row valign-wrapper">
+  <h3 class="col s10">{{ name }}</h3>
+  <h5 class="col s2 valign-wrapper">
+    {{ rating }}<i class="material-icons">grade</i>
+  </h5>
+</div>
+<img src="/storage/img/restaurant/{{ id }}.jpg" alt="{{ name }}" />
+<p class="flow-text">{{ description }}</p>
+<iframe
+  title="Restaurant Map"
+  class="responsive-img"
+  style="border: 0"
+  allowfullscreen
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCYfZF_Sws8i2f-yhEcae2eEIBdFOzutbI
+&q={{ location }}"
+>
+</iframe>

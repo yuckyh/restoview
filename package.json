@@ -1,0 +1,28 @@
+{
+  "name": "restoview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prod": "node -r dotenv/config index.js --trace-warnings",
+    "start": "nodemon -r dotenv/config --trace-warnings"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "materialize-css": "^1.0.0-rc.2",
+    "multer": "^1.4.4",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.7.2"
+  },
+  "devDependencies": {
+    "sass": "^1.49.0"
+  }
+}

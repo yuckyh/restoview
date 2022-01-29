@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restoview - {{ name }}</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/materialize.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header></header>
+
+    <nav>
+      <div class="nav-wrapper container">
+        <div class="col s12">
+          <a href="/" class="breadcrumb">Home</a>
+          <a href="#" class="breadcrumb"></a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container">
+        <div class="row">
+          <section id="restaurantDetails" class="col s12 l6"></section>
+          <section id="restaurantReviews" class="col s12 l6">
+            <h4>Reviews</h4>
+            <ul id="reviews" class="collection"></ul>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer></footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script src="/js/restaurant.js"></script>
+    <script src="/js/user.js"></script>
+    <script src="/js/script.js"></script>
+  </body>
+</html>
