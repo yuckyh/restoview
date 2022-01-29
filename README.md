@@ -3,6 +3,13 @@
 Enter the following command to get started!
 
 ```bash
-~ npm start
+npm start
 ```
-# restoview
+
+# Docker
+
+Enter the following command to start a docker container locally
+
+```bash
+docker-compose up
+```
