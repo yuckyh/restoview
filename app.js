@@ -6,8 +6,6 @@ import { resolvePath } from './utils.js';
 
 const app = express();
 
-Error.stackTraceLimit = process.env.ERR_STACK_LIMIT;
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());

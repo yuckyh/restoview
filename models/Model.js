@@ -1,5 +1,5 @@
 import db from '../db.js';
-import { errorResponse, HTTPJSONError } from '../utils.js';
+import { errorResponse } from '../utils.js';
 
 export default class Model {
   static table;

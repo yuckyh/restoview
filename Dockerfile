@@ -8,13 +8,8 @@ RUN npm i -g nodemon
 RUN npm i
 
 COPY . .
-COPY .env.prod .env
+COPY .env.docker .env
 
-EXPOSE 80
+EXPOSE 8080
 
-COPY wait-for-it.sh wait-for-it.sh
-RUN chmod +x wait-for-it.sh
-
-ENTRYPOINT [ "/bin/bash", "-c" ]
-
-CMD ["npm run prod"]
+CMD ["npm", "run", "prod"]

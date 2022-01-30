@@ -20,7 +20,8 @@
     "materialize-css": "^1.0.0-rc.2",
     "multer": "^1.4.4",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.7.2"
+    "nodemailer": "^6.7.2",
+    "pg-format": "^1.0.4"
   },
   "devDependencies": {
     "sass": "^1.49.0"
