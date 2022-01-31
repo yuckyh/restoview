@@ -57,7 +57,7 @@ var loadSessionComponents = (session, restaurantId) => {
 
   console.log(session);
   var matchingReview = Array.from(
-    document.querySelectorAll('#reviews li.collection-item')
+    document.querySelectorAll('#reviews .collection-item')
   ).filter((element) => {
     return element.querySelector('span.title').innerHTML === session.username;
   });
@@ -70,7 +70,7 @@ var loadSessionComponents = (session, restaurantId) => {
     return Promise.all([
       formModal,
       fetchButtons(matchingReview[0]),
-      fetchDeleteModal(),
+      fetchDeleteModal(restaurantId),
     ]);
 
   return Promise.all([formModal, fetchButton()]);
@@ -137,6 +137,16 @@ function fetchButton() {
 }
 
 function fetchFormModal(verb, session, restaurantId) {
+  if (document.querySelector('#addReviewForm') && verb === 'edit') {
+    document.querySelector('#addReviewForm').remove();
+    materializeInit();
+  }
+
+  if (document.querySelector('#editReviewForm') && verb === 'add') {
+    document.querySelector('#editReviewForm').remove();
+    materializeInit();
+  }
+
   return fetch('/partials/modals/review-form.html')
     .then((res) => res.text())
     .then((html) => {
@@ -179,7 +189,7 @@ function fetchFormModal(verb, session, restaurantId) {
     });
 }
 
-function fetchDeleteModal() {
+function fetchDeleteModal(restaurantId) {
   return fetch('/partials/modals/delete-review.html')
     .then((res) => res.text())
     .then((html) => {
