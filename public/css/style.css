@@ -39,8 +39,12 @@ body > footer {
   text-align: right;
 }
 
-.user-view .background img {
+.darken-img {
   filter: brightness(75%);
+}
+
+.collection .collection-item.no-avatar {
+  padding-left: 20px;
 }
 
 .waves-effect.waves-pink .waves-ripple {
@@ -53,7 +57,6 @@ body > footer {
   height: 300px;
 }
 
-#loginForm .card-action,
-#registerForm .card-action {
+form.card .card-action {
   text-align: center;
 }

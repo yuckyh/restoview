@@ -9,4 +9,14 @@ const restaurants = (req, res) => {
   res.set('Content-Type', 'text/html').end(html);
 };
 
-export default { restaurants };
+const resetPassword = (req, res) => {
+  const html = fs
+    .readFileSync(
+      resolvePath(import.meta.url, '../public/update-password.html')
+    )
+    .toString('utf-8');
+
+  res.set('Content-Type', 'text/html').end(html);
+};
+
+export default { restaurants, resetPassword };

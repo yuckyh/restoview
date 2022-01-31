@@ -1,7 +1,11 @@
 <div class="col s12 m6 l4">
   <div class="card hoverable">
     <div class="card-image">
-      <img src="../storage/img/restaurant/{{ id }}.jpg" height="250" />
+      <img
+        class="darken-img"
+        src="../storage/img/restaurant/{{ id }}.jpg"
+        height="250"
+      />
       <span class="card-title">{{ name }}</span>
     </div>
     <div class="card-content">
@@ -11,7 +15,7 @@
       <a href="./restaurant/{{ id }}">View More</a>
       <span class="valign-wrapper right">
         <span>{{ rating }}</span>
-        <i class="yellow-text darken-1 material-icons"> star_rate </i>
+        <i class="yellow-text material-icons"> grade </i>
       </span>
     </div>
   </div>
