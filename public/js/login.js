@@ -1,9 +1,7 @@
 function loadComponents(session) {
-  console.log('lc', session);
-  document.querySelector('#loginForm').addEventListener('submit', formLogin);
+  if (session) return (window.location = '/');
 
-  if (!session) return;
-  window.location = '/';
+  document.querySelector('#loginForm').addEventListener('submit', formLogin);
 }
 
 function formLogin(ev) {
