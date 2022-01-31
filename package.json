@@ -8,7 +8,7 @@
     "start": "nodemon -r dotenv/config --trace-warnings"
   },
   "type": "module",
-  "author": "",
+  "author": "yuckyh",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.25.0",
