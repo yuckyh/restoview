@@ -91,23 +91,23 @@ function renderReviewListItems(selector, reviews) {
 
   if (!reviews.length) return;
 
-  list.parentElement.querySelector('p').remove();
+  if (list.parentElement.querySelector('p'))
+    list.parentElement.querySelector('p').remove();
 
   return fetch('/partials/review-list-item.html')
     .then((res) => res.text())
-    .then((html) =>
-      Promise.all(reviews.map((data) => getUser(data.userId))).then(
+    .then((html) => {
+      return Promise.all(reviews.map((data) => getUser(data.userId))).then(
         (users) => {
-          const content = reviews.map((data, i) => {
-            const user = users[i];
-            console.log({ ...data, ...user });
-            return parseReviewTemplate(html, { ...data, ...user });
-          });
+          const content = reviews
+            .map((review, i) => ({ ...review, ...users[i] }))
+            .map((data) => parseReviewTemplate(html, data))
+            .join('');
 
-          list.innerHTML = content.join('');
+          list.innerHTML = content;
         }
-      )
-    );
+      );
+    });
 }
 
 function parseHeaderTemplate(html, session) {
@@ -137,15 +137,33 @@ function parseRestaurantTemplate(html, restaurantData) {
     .replaceAll('{{ id }}', restaurantData.id)
     .replaceAll('{{ description }}', restaurantData.description)
     .replaceAll('{{ rating }}', restaurantData.rating)
-    .replaceAll('{{ location }}', restaurantData.location);
+    .replaceAll('{{ location }}', restaurantData.location)
+    .replaceAll('{{ openDays }}', restaurantData.openDays)
+    .replaceAll('{{ openTime }}', restaurantData.openTime)
+    .replaceAll('{{ closeTime }}', restaurantData.closeTime)
+    .replaceAll(
+      '{{ cuisines }}',
+      restaurantData.cuisines.replaceAll(',', ', ')
+    );
 }
 
 function parseReviewTemplate(html, reviewData) {
-  return html
-    .replaceAll('{{ user.username }}', reviewData.user.username)
+  if (reviewData.user) {
+    html = html.replaceAll('{{ user.username }}', reviewData.user.username);
+  }
+
+  if (reviewData.restaurant) {
+    html = html
+      .replaceAll('{{ restaurant.name }}', reviewData.restaurant.name)
+      .replaceAll('{{ restaurant.id }}', reviewData.restaurant.id);
+  }
+
+  html = html
     .replaceAll('{{ rating }}', reviewData.rating)
     .replaceAll('{{ userId }}', reviewData.userId)
     .replaceAll('{{ content }}', reviewData.content);
+
+  return html;
 }
 
 function jsonFormData(form) {

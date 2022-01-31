@@ -14,13 +14,136 @@
   <body>
     <header></header>
 
-    <main>
-      <section class="container">
-        <h3>Your Profile</h3>
-        <form id="editProfileForm">
-					
-				</form>
-      </section>
+    <main class="container">
+      <div class="row">
+        <section class="col s12 l6">
+          <h3>Your Profile</h3>
+          <form id="editProfileForm" class="card">
+            <div class="card-content">
+              <div class="input-field">
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  class="validate counter"
+                  minlength="3"
+                  maxlength="40"
+                  data-length="40"
+                  required
+                />
+                <label for="username">Username</label>
+                <span class="helper-text" data-error="Required"></span>
+              </div>
+              <div class="input-field">
+                <input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  class="validate"
+                  data-length="20"
+                  required
+                />
+                <label for="firstName">First Name</label>
+                <span class="helper-text" data-error="Required"></span>
+              </div>
+              <div class="input-field">
+                <input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  class="validate"
+                  data-length="20"
+                  required
+                />
+                <label for="lastName">Last Name</label>
+                <span class="helper-text" data-error="Required"></span>
+              </div>
+              <div class="input-field">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="validate"
+                  data-length="256"
+                  required
+                />
+                <label for="email">Email</label>
+                <span
+                  class="helper-text"
+                  data-error="Please input a valid email"
+                  data-success="Email is valid"
+                  >Please input a valid email</span
+                >
+              </div>
+              <div class="input-field">
+                <input
+                  type="tel"
+                  name="contactNo"
+                  id="contactNo"
+                  pattern="[0-9]{8}"
+                  class="validate"
+                  data-length="8"
+                  required
+                />
+                <label for="contactNo">Contact Number</label>
+                <span
+                  class="helper-text"
+                  data-error="Please insert an 8-digit phone number"
+                  data-success="Contact number is valid"
+                  >Please insert an 8-digit phone number</span
+                >
+              </div>
+              <div class="input-field">
+                <div>
+                  <label>Gender</label>
+                </div>
+                <div>
+                  <label>
+                    <input type="radio" name="gender" value="male" />
+                    <span>Male</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="gender" value="female" />
+                    <span>Female</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="gender" checked />
+                    <span>Others</span>
+                  </label>
+                </div>
+              </div>
+              <div class="file-field input-field">
+                <div class="row valign-wrapper">
+                  <div class="file-path-wrapper input-field col s9">
+                    <input class="file-path" type="text" id="profilePicPath" />
+                    <label for="profilePicPath">Profile Picture</label>
+                  </div>
+                  <div class="col s3">
+                    <div class="cyan lighten-2 btn-small hoverable right">
+                      <span>
+                        Upload
+                        <i class="material-icons right">upload</i>
+                      </span>
+                      <input type="file" name="profilePic" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <a href="/login">Already have an account?</a>
+            </div>
+            <div class="card-action">
+              <button class="waves-effect waves-pink btn-flat" type="submit">
+                sign up
+              </button>
+            </div>
+          </form>
+        </section>
+        <section class="col s12 l6">
+          <h4>Your Reviews</h4>
+          <div id="reviews" class="collection"></div>
+          <p>You have no reviews yet...</p>
+        </section>
+      </div>
     </main>
 
     <footer></footer>
