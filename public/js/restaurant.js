@@ -38,6 +38,10 @@ function getReviews(restaurantId) {
     });
 }
 
+function getUser(userId) {
+  return fetch(`/api/user/${userId}`).then((res) => res.json());
+}
+
 var loadComponents = (session) => {
   var addReview = document.querySelector('#addReview');
 

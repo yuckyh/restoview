@@ -86,21 +86,25 @@ function renderRestaurantCards(selector, restaurants) {
 }
 
 function renderReviewListItems(selector, reviews) {
-  var list = document.querySelector('#reviews');
+  var list = document.querySelector(selector);
   list.innerHTML = '';
+
+  if (!reviews.length) return;
+
+  list.parentElement.querySelector('p').remove();
+
   return fetch('/partials/review-list-item.html')
     .then((res) => res.text())
     .then((html) =>
-      Promise.all(reviews.map((data) => getUserDetails(data.userId))).then(
+      Promise.all(reviews.map((data) => getUser(data.userId))).then(
         (users) => {
           const content = reviews.map((data, i) => {
             const user = users[i];
             console.log({ ...data, ...user });
             return parseReviewTemplate(html, { ...data, ...user });
           });
-          document
-            .querySelectorAll(selector)
-            .forEach((e) => (e.innerHTML = content.join('')));
+
+          list.innerHTML = content.join('');
         }
       )
     );
