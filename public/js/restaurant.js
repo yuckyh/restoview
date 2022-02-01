@@ -1,5 +1,5 @@
 function getRestaurant() {
-  var url = new URL(location.href);
+  var url = new URL(window.location);
   var restaurantId = url.pathname.split('/')[2];
 
   return fetch(`/api/restaurant/${restaurantId}`)

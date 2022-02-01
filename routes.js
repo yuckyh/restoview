@@ -12,6 +12,7 @@ import { imageOnlyUpload } from './utils.js';
 
 const authRouter = Router();
 const openRouter = Router();
+const viewRouter = Router();
 
 const imageUpload = multer({
   fileFilter: imageOnlyUpload,
@@ -22,6 +23,7 @@ authRouter.use(
   sessionController.validateSession,
   sessionController.requireSession
 );
+// viewRouter.use(viewController.handleError);
 
 openRouter.route('/cuisines').get(cuisineController.getList);
 
@@ -72,8 +74,10 @@ openRouter
   .patch(userController.getByResetLink, userController.setPasswordById);
 
 app.route('/restaurant/:restaurantId').get(viewController.restaurants);
+app.route('/reset-password/:resetLink').get(viewController.resetPassword);
 
 app.use('/api', openRouter);
 app.use('/api', authRouter);
+// app.use('/', viewRouter);
 
 export default { openRouter, authRouter };

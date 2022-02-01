@@ -31,6 +31,26 @@ body > footer {
   padding-right: 10px;
 }
 
+.navbar-fixed {
+  z-index: 998;
+}
+
+nav {
+  transition: all ease-in-out 300ms;
+}
+
+nav.black-text a {
+  color: black;
+}
+
+nav.black-text .breadcrumb::before {
+  color: black;
+}
+
+nav.black-text .breadcrumb:last-child {
+  color: black;
+}
+
 .text-center {
   text-align: center;
 }

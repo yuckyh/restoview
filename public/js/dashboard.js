@@ -1,8 +1,4 @@
 function loadComponents(session) {
-  if (!session) {
-    window.location = '/login';
-  }
-
   var editProfileForm = document.querySelector('#editProfileForm');
 
   Object.keys(session).forEach((key) => {

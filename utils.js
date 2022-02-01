@@ -1,19 +1,22 @@
 import cryptoJs from 'crypto-js';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import fs from 'fs';
 import nodemailer from 'nodemailer';
 
-const errorResponse = (res, status, message) => {
+const errorResponse = (res, status, message, isView) => {
   const err = new HTTPJSONError(status, message);
 
   console.error(err);
 
-  res.status(status).json({ err });
-};
+  if (!isView) return res.status(status).json({ err });
 
-const resolvePath = (fileUrl, ...paths) => {
-  return path.join(path.dirname(fileURLToPath(fileUrl)), ...paths);
+  const html = fs
+    .readFileSync('./public/err.html')
+    .toString('utf-8')
+    .replaceAll('{{ status }}', status)
+    .replaceAll('{{ error }}', message);
+
+  return res.status(status).send(html);
 };
 
 const getCredentials = (credentials) => {
@@ -87,7 +90,6 @@ class HTTPJSONError extends Error {
 }
 
 export {
-  resolvePath,
   errorResponse,
   getCredentials,
   hashPassword,

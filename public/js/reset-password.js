@@ -1,6 +1,4 @@
 function loadComponents(session) {
-  if (session) window.location = '/';
-
   document
     .querySelector('#resetPasswordForm')
     .addEventListener('submit', formResetPassword);
@@ -24,7 +22,7 @@ function formResetPassword(ev) {
       console.log(data);
       return M.toast({
         html: 'Password reset email sent successfully!',
-        completeCallback: () => (window.location = '/login'),
+        completeCallback: () => (window.location = '/'),
       });
     });
 }

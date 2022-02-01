@@ -2,6 +2,9 @@ $primary-color: color('cyan', 'lighten-2');
 $secondary-color: color('pink', 'lighten-1');
 $link-color: color('pink', 'lighten-1');
 
+$small-screen-up: 577px;
+$small-screen: 576px;
+
 $card-link-color: $link-color;
 
 $footer-bg-color: $independence;

@@ -35,20 +35,4 @@ const getById = (req, res) => {
   });
 };
 
-const getByIdForView = (req, res, next) => {
-  const restaurantId = parseInt(req.params.restaurantId);
-
-  Restaurant.getById(restaurantId, res, (restaurant) => {
-    if (!restaurant.id) {
-      return errorResponse(
-        res,
-        404,
-        `Restaurant of id: ${restaurantId} not found`
-      );
-    }
-
-    next();
-  });
-};
-
-export default { getList, getById, getByIdForView };
+export default { getList, getById };

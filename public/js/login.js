@@ -1,11 +1,14 @@
 function loadComponents(session) {
-  if (session) return (window.location = '/');
-
   document.querySelector('#loginForm').addEventListener('submit', formLogin);
 }
 
 function formLogin(ev) {
   ev.preventDefault();
+
+  if (ev.target.dataset.active) return;
+
+  ev.target.dataset.active = '';
+  console.log(ev.target.dataset.active);
 
   var data = jsonFormData(ev.target);
   var username = data.username;
@@ -19,6 +22,7 @@ function formLogin(ev) {
   })
     .then((res) => res.json())
     .then((data) => {
+      delete ev.target.dataset.active;
       if (data.err) return M.toast({ html: data.err.error });
       console.log(data);
       return refreshSession();

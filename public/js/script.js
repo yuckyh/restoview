@@ -40,11 +40,9 @@ function refreshSession() {
 
       if (data.err) return console.log(data.err);
 
-      if (data.user) {
-        console.log(data.user);
-        return data.user;
-      }
+      if (data.user) return data.user;
     })
+    .then(checkURL)
     .then(loadPartials)
     .then(loadComponents)
     .then(materializeInit);
@@ -52,24 +50,54 @@ function refreshSession() {
 
 // Util functions
 
+function checkURL(session) {
+  var location = new URL(window.location).pathname;
+  if (!session && location === '/dashboard') {
+    window.location = '/login';
+  }
+
+  var noLoggedIn = ['/login', '/register', '/reset-password'];
+
+  if (session && noLoggedIn.some((path) => location.includes(path))) {
+    window.location = '/';
+  }
+
+  return session;
+}
+
 function includeHeader(session) {
-  var element = document.querySelector('header');
-  element.innerHTML = '';
+  var header = document.querySelector('header');
+  header.classList.toggle('navbar-fixed', true);
+
+  window.addEventListener('scroll', (ev) => {
+    var navClasses = header.querySelector('nav').classList;
+    if (scrollY < header.scrollHeight) {
+      navClasses.toggle('white', true);
+      navClasses.toggle('black-text', true);
+      navClasses.toggle('z-depth-0', true);
+      return;
+    }
+    navClasses.toggle('white', false);
+    navClasses.toggle('black-text', false);
+    navClasses.toggle('z-depth-0', false);
+  });
+
+  header.innerHTML = '';
   return fetch('/partials/header.html')
     .then((res) => res.text())
     .then((rawHeader) =>
       parseHeaderTemplate(rawHeader, session).then(
-        (header) => (element.innerHTML = header)
+        (headerHTML) => (header.innerHTML = headerHTML)
       )
     );
 }
 
 function includeFooter() {
-  var element = document.querySelector('footer');
-  element.innerHTML = '';
+  var footer = document.querySelector('footer');
+  footer.innerHTML = '';
   return fetch('/partials/footer.html')
     .then((res) => res.text())
-    .then((footer) => (element.innerHTML = footer));
+    .then((footerHTML) => (footer.innerHTML = footerHTML));
 }
 
 function renderRestaurantCards(selector, restaurants) {
