@@ -5,6 +5,9 @@ $link-color: color('pink', 'lighten-1');
 $small-screen-up: 577px;
 $small-screen: 576px;
 
+$font-stack: 'Roboto Slab', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+
 $card-link-color: $link-color;
 
 $footer-bg-color: $independence;

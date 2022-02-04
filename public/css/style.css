@@ -12,10 +12,6 @@ body > footer {
   text-transform: capitalize;
 }
 
-.file-field {
-  margin-top: 2rem;
-}
-
 .file-field input.file-path {
   width: 100%;
 }
@@ -51,14 +47,6 @@ nav.black-text .breadcrumb:last-child {
   color: black;
 }
 
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
 .darken-img {
   filter: brightness(75%);
 }
@@ -71,6 +59,38 @@ nav.black-text .breadcrumb:last-child {
   background-color: rgba(233, 30, 90, 0.65);
 }
 
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row.valign-wrapper {
+  flex-wrap: wrap;
+}
+
+.row.valign-wrapper .col {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.row .col.right {
+  float: none !important;
+  margin-left: auto;
+}
+
+.row .col.center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: inherit;
+}
+
+#restaurants,
+#restaurantDetails,
+#reviews {
+  opacity: 0;
+  transition: all ease-in-out 400ms;
+}
+
 #restaurantDetails img {
   object-fit: cover;
   width: 100%;
@@ -79,4 +99,24 @@ nav.black-text .breadcrumb:last-child {
 
 form.card .card-action {
   text-align: center;
+}
+
+#sortContent .row *,
+#filterContent .row * {
+  height: 0;
+  margin: 0;
+  transition: all ease-in-out 300ms;
+}
+
+#sortContent .row,
+#filterContent .row {
+  opacity: 0;
+  margin-bottom: 0;
+  transition: all ease-in-out 300ms;
+}
+
+#sortContent.visible .row,
+#filterContent.visible .row {
+  opacity: 1;
+  margin-bottom: 45px;
 }
