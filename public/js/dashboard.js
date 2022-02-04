@@ -33,30 +33,26 @@ function renderYourReviewItems(selector, userId, reviews) {
 
   list.parentElement.querySelector('p').remove();
 
-  return fetch('/partials/your-review-item.html')
-    .then((res) => res.text())
-    .then((html) =>
-      Promise.all(reviews.map((data) => getRestaurant(data.restaurantId))).then(
-        (restaurants) => {
-          const content = reviews
-            .map((review, i) => ({ ...review, ...restaurants[i] }))
-            .map((data) => parseReviewTemplate(html, data))
-            .join('');
+  return getPartial('/your-review-item', (html) =>
+    Promise.all(reviews.map((data) => getRestaurant(data.restaurantId))).then(
+      (restaurants) => {
+        const content = reviews
+          .map((review, i) => ({ ...review, ...restaurants[i] }))
+          .map((data) => parseHandlebars(html, data))
+          .join('');
 
-          list.innerHTML = content;
-        }
-      )
-    );
+        list.innerHTML = content;
+      }
+    )
+  );
 }
 
-function fetchButtons(review) {
-  return fetch('/partials/edit-delete-review.html')
-    .then((res) => res.text())
-    .then((html) => {
-      var editDeleteReview = document.querySelector('#editDeleteReview');
-      if (editDeleteReview) editDeleteReview.remove();
+function renderButtons(review) {
+  return getPartial('/edit-delete-review', (html) => {
+    var editDeleteReview = document.querySelector('#editDeleteReview');
+    if (editDeleteReview) editDeleteReview.remove();
 
-      review.insertAdjacentHTML('beforeend', html);
-      document.querySelector('#reviews').prepend(review);
-    });
+    review.insertAdjacentHTML('beforeend', html);
+    document.querySelector('#reviews').prepend(review);
+  });
 }

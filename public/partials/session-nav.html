@@ -13,19 +13,19 @@
         width="64"
         height="64"
         class="circle"
-        src="/storage/img/user/{{ user.id }}.jpg"
+        src="/storage/img/user/{{ id }}.jpg"
     /></a>
     <a href="/dashboard"
       ><span class="white-text name"
-        >{{ user.firstName }} {{ user.lastName }}</span
+        >{{ firstName }} {{ lastName }}</span
       ></a
     >
     <a href="/dashboard"
-      ><span class="white-text email">{{ user.email }}</span></a
+      ><span class="white-text email">{{ email }}</span></a
     >
   </div>
 </li>
 <li>
-  <a href="/dashboard">Hello, {{ user.username }}</a>
+  <a href="/dashboard">Hello, {{ username }}</a>
 </li>
 <li><a class="logout-link" href="#">Log out</a></li>

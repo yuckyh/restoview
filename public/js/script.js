@@ -9,7 +9,7 @@ function materializeInit() {
 
   M.AutoInit();
 
-  var sidenavs = document.querySelectorAll('.sidenav');
+  var sidenavs = document.querySelectorAll('.sidenav.no-autoinit');
   sidenavInstances = M.Sidenav.init(sidenavs, {});
 
   var counters = document.querySelectorAll('input[data-length]');
@@ -83,113 +83,72 @@ function includeHeader(session) {
   });
 
   header.innerHTML = '';
-  return fetch('/partials/header.html')
-    .then((res) => res.text())
-    .then((rawHeader) =>
-      parseHeaderTemplate(rawHeader, session).then(
-        (headerHTML) => (header.innerHTML = headerHTML)
-      )
-    );
+  return getPartial('/header', (rawHeader) =>
+    parseHeaderTemplate(rawHeader, session).then(
+      (headerHTML) => (header.innerHTML = headerHTML)
+    )
+  );
 }
 
 function includeFooter() {
   var footer = document.querySelector('footer');
   footer.innerHTML = '';
-  return fetch('/partials/footer.html')
-    .then((res) => res.text())
-    .then((footerHTML) => (footer.innerHTML = footerHTML));
+  return getPartial('/footer', (footerHTML) => (footer.innerHTML = footerHTML));
 }
 
 function renderRestaurantCards(selector, restaurants) {
-  return fetch('/partials/restaurant-card.html')
-    .then((res) => res.text())
-    .then((html) => {
-      const content = restaurants.map((data) =>
-        parseRestaurantTemplate(html, data)
-      );
-      document
-        .querySelectorAll(selector)
-        .forEach((e) => (e.innerHTML = content.join('')));
-    });
+  var element = document.querySelector(selector);
+  return getPartial('/restaurant-card', (html) => {
+    var content = restaurants.map((data) => parseHandlebars(html, data));
+
+    element.innerHTML = content.join('');
+
+    element.style.opacity = 1;
+
+    var viewMore = document.querySelector('#viewMore');
+
+    if (restaurants.length < 12)
+      return viewMore && viewMore.parentElement.parentElement.remove();
+
+    return renderViewMoreButton(selector, viewMore);
+  });
 }
 
-function renderReviewListItems(selector, reviews) {
-  var list = document.querySelector(selector);
-  list.innerHTML = '';
+function renderViewMoreButton(selector, viewMore) {
+  return getPartial('/view-more', (html) => {
+    if (!viewMore)
+      return document
+        .querySelector(selector)
+        .insertAdjacentHTML('afterend', html);
+  });
+}
 
-  if (!reviews.length) return;
-
-  if (list.parentElement.querySelector('p'))
-    list.parentElement.querySelector('p').remove();
-
-  return fetch('/partials/review-list-item.html')
-    .then((res) => res.text())
-    .then((html) => {
-      return Promise.all(reviews.map((data) => getUser(data.userId))).then(
-        (users) => {
-          const content = reviews
-            .map((review, i) => ({ ...review, ...users[i] }))
-            .map((data) => parseReviewTemplate(html, data))
-            .join('');
-
-          list.innerHTML = content;
-        }
-      );
-    });
+function renderCuisineFilters(selector, cuisines) {
+  return getPartial('/cuisine-filter', (html) => {
+    var content = cuisines
+      .map((cuisine) => parseHandlebars(html, cuisine))
+      .join('');
+    document.querySelector(selector).innerHTML = content;
+  });
 }
 
 function parseHeaderTemplate(html, session) {
-  var path = session
-    ? '/partials/session-nav.html'
-    : '/partials/no-session-nav.html';
-  return fetch(path)
-    .then((res) => res.text())
-    .then((nav) =>
-      html.replaceAll('{{ nav }}', parseNavTemplate(nav, session))
-    );
+  var path = session ? '/session-nav' : '/no-session-nav';
+  return getPartial(path, (nav) =>
+    html.replaceAll('{{ nav }}', parseHandlebars(nav, session))
+  );
 }
 
-function parseNavTemplate(html, user) {
-  if (!user) return html;
-  return html
-    .replaceAll('{{ user.username }}', user.username)
-    .replaceAll('{{ user.id }}', user.id)
-    .replaceAll('{{ user.firstName }}', user.firstName)
-    .replaceAll('{{ user.lastName }}', user.lastName)
-    .replaceAll('{{ user.email }}', user.email);
-}
+function parseHandlebars(html, data, depth) {
+  if (data === null || data === undefined) return html;
 
-function parseRestaurantTemplate(html, restaurantData) {
-  return html
-    .replaceAll('{{ name }}', restaurantData.name)
-    .replaceAll('{{ id }}', restaurantData.id)
-    .replaceAll('{{ description }}', restaurantData.description)
-    .replaceAll('{{ rating }}', restaurantData.rating)
-    .replaceAll('{{ location }}', restaurantData.location)
-    .replaceAll('{{ openDays }}', restaurantData.openDays)
-    .replaceAll('{{ openTime }}', restaurantData.openTime)
-    .replaceAll('{{ closeTime }}', restaurantData.closeTime)
-    .replaceAll(
-      '{{ cuisines }}',
-      restaurantData.cuisines.replaceAll(',', ', ')
-    );
-}
+  Object.keys(data).forEach((key) => {
+    depth = depth || '';
+    if (typeof data[key] === 'object')
+      return (html = parseHandlebars(html, data[key], depth + key + '.'));
 
-function parseReviewTemplate(html, reviewData) {
-  if (reviewData.user) {
-    html = html.replaceAll('{{ user.username }}', reviewData.user.username);
-  }
-
-  if (reviewData.restaurant) {
-    html = html
-      .replaceAll('{{ restaurant.name }}', reviewData.restaurant.name)
-      .replaceAll('{{ restaurant.id }}', reviewData.restaurant.id);
-  }
-
-  html = html
-    .replaceAll('{{ rating }}', reviewData.rating)
-    .replaceAll('{{ userId }}', reviewData.userId)
-    .replaceAll('{{ content }}', reviewData.content);
+    html = html.replaceAll(`{{ ${depth + key} }}`, data[key]);
+  });
 
   return html;
 }
@@ -226,4 +185,10 @@ function refreshRatingInput(value) {
     classList.toggle('pink-text', true);
     classList.toggle('lighten-1', true);
   }
+}
+
+function getPartial(file, callback) {
+  return fetch(`/partials${file}.html`)
+    .then((res) => res.text())
+    .then((html) => callback(html));
 }

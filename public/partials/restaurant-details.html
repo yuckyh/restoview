@@ -15,14 +15,14 @@
 <h5>Opening Hours</h5>
 <p class="capitalize">{{ openDays }} from {{ openTime }} to {{ closeTime }}</p>
 <h5>Location</h5>
-<br />
+<p class="capitalize">{{ address }}</p>
 <div class="video-container">
   <iframe
     title="Restaurant Map"
     style="border: 0"
     allowfullscreen
     src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCYfZF_Sws8i2f-yhEcae2eEIBdFOzutbI
-  &q={{ location }}"
+  &q={{ location.x }}, {{ location.y }}"
   >
 </div>
 </iframe>

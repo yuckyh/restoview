@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RestoView - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -18,9 +24,37 @@
       <div class="row">
         <section class="col s12 l6">
           <h3>Your Profile</h3>
+
           <form id="editProfileForm" class="card">
             <div class="card-content">
+              <div class="file-field input-field">
+                <div class="row valign-wrapper">
+                  <div class="col">
+                    <img
+                      id="profilePic"
+                      src="/storage/img/user/1.jpg"
+                      alt=""
+                      width="64"
+                      height="64"
+                    />
+                  </div>
+                  <div class="file-path-wrapper input-field col s9">
+                    <input class="file-path" type="text" id="profilePicPath" />
+                    <label for="profilePicPath">Profile Picture</label>
+                  </div>
+                  <div class="col s3">
+                    <div class="cyan lighten-2 btn-small hoverable right">
+                      <span>
+                        Upload
+                        <i class="material-icons right">upload</i>
+                      </span>
+                      <input type="file" name="profilePic" />
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="input-field">
+                <label for="username">Username</label>
                 <input
                   type="text"
                   name="username"
@@ -31,7 +65,6 @@
                   data-length="40"
                   required
                 />
-                <label for="username">Username</label>
                 <span class="helper-text" data-error="Required"></span>
               </div>
               <div class="input-field">
@@ -112,23 +145,7 @@
                   </label>
                 </div>
               </div>
-              <div class="file-field input-field">
-                <div class="row valign-wrapper">
-                  <div class="file-path-wrapper input-field col s9">
-                    <input class="file-path" type="text" id="profilePicPath" />
-                    <label for="profilePicPath">Profile Picture</label>
-                  </div>
-                  <div class="col s3">
-                    <div class="cyan lighten-2 btn-small hoverable right">
-                      <span>
-                        Upload
-                        <i class="material-icons right">upload</i>
-                      </span>
-                      <input type="file" name="profilePic" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+
               <a href="/login">Already have an account?</a>
             </div>
             <div class="card-action">

@@ -5,24 +5,23 @@ function getRestaurant() {
   return fetch(`/api/restaurant/${restaurantId}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
-      return fetch('/partials/restaurant-details.html')
-        .then((res) => res.text())
-        .then((html) => {
-          var restaurantDetails = document.querySelector('#restaurantDetails');
+      // console.log(data);
+      return getPartial('/restaurant-details', (html) => {
+        var restaurantDetails = document.querySelector('#restaurantDetails');
 
-          document.title = `Restoview - ${data.restaurant.name}`;
+        document.title = `Restoview - ${data.restaurant.name}`;
 
-          restaurantDetails.innerHTML = parseRestaurantTemplate(
-            html,
-            data.restaurant
-          );
+        console.log(data.restaurant);
 
-          document.querySelector('nav .breadcrumb:last-child').innerHTML =
-            data.restaurant.name;
+        restaurantDetails.style.opacity = 1;
 
-          return data.restaurant.id;
-        });
+        restaurantDetails.innerHTML = parseHandlebars(html, data.restaurant);
+
+        document.querySelector('nav .breadcrumb:last-child').innerHTML =
+          data.restaurant.name;
+
+        return data.restaurant.id;
+      });
     });
 }
 
@@ -62,11 +61,11 @@ var loadSessionComponents = (session, restaurantId) => {
     return element.querySelector('span.title').innerHTML === session.username;
   });
 
-  var verb = matchingReview.length ? 'edit' : 'add';
+  var action = matchingReview.length ? 'edit' : 'add';
 
-  var formModal = fetchFormModal(verb, session, restaurantId);
+  var formModal = fetchFormModal(action, session, restaurantId);
 
-  if (verb === 'edit')
+  if (action === 'edit')
     return Promise.all([
       formModal,
       fetchButtons(matchingReview[0]),
@@ -79,6 +78,10 @@ var loadSessionComponents = (session, restaurantId) => {
 function formAddReview(ev, restaurantId) {
   ev.preventDefault();
 
+  if (ev.target.dataset.active) return;
+
+  ev.target.dataset.active = 'true';
+
   var data = jsonFormData(ev.target);
 
   fetch(`/api/restaurant/${restaurantId}/review`, {
@@ -90,6 +93,7 @@ function formAddReview(ev, restaurantId) {
   })
     .then((res) => res.json())
     .then((data) => {
+      delete ev.target.dataset.active;
       console.log(data);
       return refreshSession();
     });
@@ -97,6 +101,10 @@ function formAddReview(ev, restaurantId) {
 
 function formEditReview(ev, restaurantId) {
   ev.preventDefault();
+
+  if (ev.target.dataset.active) return;
+
+  ev.target.dataset.active = 'true';
 
   var data = jsonFormData(ev.target);
 
@@ -109,99 +117,110 @@ function formEditReview(ev, restaurantId) {
   })
     .then((res) => res.json())
     .then((data) => {
+      delete ev.target.dataset.active;
       console.log(data);
       return refreshSession();
     });
 }
 
-function fetchButtons(review) {
-  return fetch('/partials/edit-delete-review.html')
-    .then((res) => res.text())
-    .then((html) => {
-      var editDeleteReview = document.querySelector('#editDeleteReview');
-      if (editDeleteReview) editDeleteReview.remove();
+function renderReviewListItems(selector, reviews) {
+  var list = document.querySelector(selector);
 
-      review.insertAdjacentHTML('beforeend', html);
-      document.querySelector('#reviews').prepend(review);
-    });
+  list.style.opacity = 1;
+  list.innerHTML = '';
+
+  if (!reviews.length) return;
+
+  list.parentElement.querySelector('p') &&
+    list.parentElement.querySelector('p').remove();
+
+  return getPartial('/review-list-item', (html) => {
+    return Promise.all(reviews.map((data) => getUser(data.userId))).then(
+      (users) => {
+        const content = reviews
+          .map((review, i) => ({ ...review, ...users[i] }))
+          .map((data) => parseHandlebars(html, data))
+          .join('');
+
+        list.innerHTML = content;
+      }
+    );
+  });
 }
 
-function fetchButton() {
-  return fetch('/partials/add-review.html')
-    .then((res) => res.text())
-    .then((html) => {
-      document
-        .querySelector('#reviews')
-        .insertAdjacentHTML('beforebegin', html);
-    });
+function renderButtons(review) {
+  return getPartial('/edit-delete-review', (html) => {
+    var editDeleteReview = document.querySelector('#editDeleteReview');
+    if (editDeleteReview) editDeleteReview.remove();
+
+    review.insertAdjacentHTML('beforeend', html);
+    document.querySelector('#reviews').prepend(review);
+  });
 }
 
-function fetchFormModal(verb, session, restaurantId) {
-  if (document.querySelector('#addReviewForm') && verb === 'edit') {
+function renderButton() {
+  return getPartial('/add-review', (html) => {
+    document.querySelector('#reviews').insertAdjacentHTML('beforebegin', html);
+  });
+}
+
+function renderFormModal(action, session, restaurantId) {
+  if (document.querySelector('#addReviewForm') && action === 'edit') {
     document.querySelector('#addReviewForm').remove();
     materializeInit();
   }
 
-  if (document.querySelector('#editReviewForm') && verb === 'add') {
+  if (document.querySelector('#editReviewForm') && action === 'add') {
     document.querySelector('#editReviewForm').remove();
     materializeInit();
   }
 
-  return fetch('/partials/modals/review-form.html')
-    .then((res) => res.text())
-    .then((html) => {
-      var form = document.querySelector(`#${verb}ReviewForm`);
-      if (form) form.remove();
+  return getPartial('/modals/review-form', (html) => {
+    var form = document.querySelector(`#${action}ReviewForm`);
+    if (form) form.remove();
 
-      var deleteModal = document.querySelector('#deleteReviewForm');
-      if (deleteModal) deleteModal.remove();
+    var deleteModal = document.querySelector('#deleteReviewForm');
+    if (deleteModal) deleteModal.remove();
 
-      var content = html.replaceAll('{{ action }}', verb);
-      document.querySelector('body').insertAdjacentHTML('beforeend', content);
+    document
+      .querySelector('body')
+      .insertAdjacentHTML('beforeend', parseHandlebars(html, { action }));
 
-      form = document.querySelector(`#${verb}ReviewForm`);
+    form = document.querySelector(`#${action}ReviewForm`);
 
-      if (verb === 'edit') {
-        fetch(`/api/restaurant/${restaurantId}/review/user/${session.id}`)
-          .then((res) => res.json())
-          .then((data) => {
-            form
-              .querySelector('label[for=content]')
-              .classList.toggle('active', true);
-            form['content'].value = data.review.content;
-            form['rating'].value = data.review.rating;
-            refreshRatingInput(data.review.rating);
-          });
+    if (action === 'edit') {
+      fetch(`/api/restaurant/${restaurantId}/review/user/${session.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          form
+            .querySelector('label[for=content]')
+            .classList.toggle('active', true);
+          form['content'].value = data.review.content;
+          form['rating'].value = data.review.rating;
+          refreshRatingInput(data.review.rating);
+        });
 
-        form.addEventListener('submit', (ev) =>
-          formEditReview(ev, restaurantId)
-        );
-      } else {
-        form.addEventListener('submit', (ev) =>
-          formAddReview(ev, restaurantId)
-        );
-      }
-      Array.from(
-        document.querySelectorAll('.rating-input input[type=checkbox]')
-      ).forEach((element) => {
-        element.addEventListener('change', updateRatingInput);
-      });
+      form.addEventListener('submit', (ev) => formEditReview(ev, restaurantId));
+    } else {
+      form.addEventListener('submit', (ev) => formAddReview(ev, restaurantId));
+    }
+    Array.from(
+      document.querySelectorAll('.rating-input input[type=checkbox]')
+    ).forEach((element) => {
+      element.addEventListener('change', updateRatingInput);
     });
+  });
 }
 
-function fetchDeleteModal(restaurantId) {
-  return fetch('/partials/modals/delete-review.html')
-    .then((res) => res.text())
-    .then((html) => {
-      document.querySelector('body').insertAdjacentHTML('beforeend', html);
+function renderDeleteModal(restaurantId) {
+  return getPartial('/modals/delete-review', (html) => {
+    document.querySelector('body').insertAdjacentHTML('beforeend', html);
 
-      document
-        .querySelector('#deleteReview')
-        .addEventListener('click', (ev) => {
-          ev.preventDefault();
-          return fetch(`/api/restaurant/${restaurantId}/review`, {
-            method: 'DELETE',
-          }).then(refreshSession);
-        });
+    document.querySelector('#deleteReview').addEventListener('click', (ev) => {
+      ev.preventDefault();
+      return fetch(`/api/restaurant/${restaurantId}/review`, {
+        method: 'DELETE',
+      }).then(refreshSession);
     });
+  });
 }

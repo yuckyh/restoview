@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RestoView - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -16,7 +22,65 @@
 
     <main>
       <section class="container">
-        <h3>Restaurants</h3>
+        <form id="filterForm">
+          <div class="row valign-wrapper">
+            <div class="col s12 xl4">
+              <h3>Restaurants</h3>
+            </div>
+            <div class="col s12 m7 l8 xl4">
+              <div class="input-field">
+                <i class="material-icons prefix">search</i>
+                <input type="text" name="search" id="name" autocomplete="off" />
+                <label for="name">Search restaurants</label>
+              </div>
+            </div>
+            <div class="col s12 m5 l4 xl4 right-align">
+              <button
+                type="button"
+                class="btn-flat waves-effect waves-pink content-toggler"
+                data-target="sortContent"
+                data-text="sort"
+                data-icon="sort"
+              >
+                Sort<i class="material-icons right">sort</i>
+              </button>
+              <button
+                type="button"
+                class="btn-flat waves-effect waves-pink content-toggler"
+                data-target="filterContent"
+                data-text="filter"
+                data-icon="filter_list"
+              >
+                Filter<i class="material-icons right">filter_list</i>
+              </button>
+            </div>
+          </div>
+          <div id="sortContent">
+            <div class="row">
+              <h5 class="col">Sort</h5>
+            </div>
+            <div class="row">
+              <label class="col">
+                <input type="radio" name="sort" value="desc" checked />
+                <span>Descending</span>
+              </label>
+              <label class="col">
+                <input type="radio" name="sort" value="asc" />
+                <span>Ascending</span>
+              </label>
+              <label class="col">
+                <input type="radio" name="sort" value="" />
+                <span>No Sort</span>
+              </label>
+            </div>
+          </div>
+          <div id="filterContent">
+            <div class="row">
+              <h5 class="col">Cuisines</h5>
+            </div>
+            <div class="row"></div>
+          </div>
+        </form>
 
         <div id="restaurants" class="row"></div>
       </section>

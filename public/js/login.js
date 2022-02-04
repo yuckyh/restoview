@@ -7,8 +7,7 @@ function formLogin(ev) {
 
   if (ev.target.dataset.active) return;
 
-  ev.target.dataset.active = '';
-  console.log(ev.target.dataset.active);
+  ev.target.dataset.active = 'true';
 
   var data = jsonFormData(ev.target);
   var username = data.username;
