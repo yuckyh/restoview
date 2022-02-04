@@ -10,13 +10,26 @@ const errorResponse = (res, status, message, isView) => {
 
   if (!isView) return res.status(status).json({ err });
 
-  const html = fs
-    .readFileSync('./public/err.html')
-    .toString('utf-8')
-    .replaceAll('{{ status }}', status)
-    .replaceAll('{{ error }}', message);
+  const html = parseHandlebars(
+    fs.readFileSync('./public/err.html').toString('utf-8'),
+    { status, message }
+  );
 
   return res.status(status).send(html);
+};
+
+const parseHandlebars = (html, data, depth) => {
+  if (data === null || data === undefined) return html;
+
+  Object.keys(data).forEach((key) => {
+    depth = depth || '';
+    if (typeof data[key] === 'object')
+      return (html = parseHandlebars(html, data[key], depth + key + '.'));
+
+    html = html.replaceAll(`{{ ${depth + key} }}`, data[key]);
+  });
+
+  return html;
 };
 
 const getCredentials = (credentials) => {

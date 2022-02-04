@@ -80,9 +80,8 @@ const validateCredentials = (req, res, next) => {
 
   const authHeader = req.header('authorization');
 
-  if (!authHeader) {
+  if (!authHeader)
     return errorResponse(res, 401, 'No credentials found for authentication');
-  }
 
   const credentials = authHeader.split(' ')[1];
 

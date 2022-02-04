@@ -29,10 +29,7 @@ const initDB = async () => {
   });
 
   db.connect((e) => {
-    if (e) {
-      console.error(e);
-      return;
-    }
+    if (e) return console.error(e);
     console.log('DB Connected');
   });
 

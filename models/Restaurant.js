@@ -1,5 +1,6 @@
 import Cuisine from './Cuisine.js';
 import Model from './Model.js';
+import mysql from 'mysql';
 
 export default class Restaurant extends Model {
   static table = 'restoview_cdev_dbav.restaurants';
@@ -28,47 +29,42 @@ export default class Restaurant extends Model {
     this.cuisinesList = this.cuisines?.split(',');
   }
 
-  static getList(res, onComplete) {
-    this.query(
-      'SELECT *,group_concat(cuisine_name) AS cuisines FROM ?? AS r INNER JOIN ?? AS rhc ON r.id=restaurant_id INNER JOIN (SELECT id AS cuisine_id, `name` AS cuisine_name FROM ??) AS c ON c.cuisine_id=rhc.cuisine_id GROUP BY restaurant_id',
-      [this.table, this.hasCuisines, Cuisine.table],
-      this.arrResultCallback(res, onComplete)
-    );
-  }
+  static getList(res, cuisineIds, all, rating, sort, search, onComplete) {
+    const cuisineIdsSubquery =
+      cuisineIds &&
+      mysql.format(
+        'restaurant_id IN(SELECT restaurant_id FROM ?? WHERE cuisine_id IN (?))',
+        [this.hasCuisines, cuisineIds]
+      );
+    const nameSubquery =
+      search && mysql.format('r.`name` LIKE ?', [`%${search}%`]);
 
-  static getListTop(res, onComplete) {
-    this.query(
-      'SELECT *,group_concat(cuisine_name) AS cuisines FROM ?? AS r INNER JOIN ?? AS rhc ON r.id=restaurant_id INNER JOIN (SELECT id AS cuisine_id, `name` AS cuisine_name FROM ??) AS c ON c.cuisine_id=rhc.cuisine_id GROUP BY restaurant_id ORDER BY rating DESC LIMIT 12',
-      [this.table, this.hasCuisines, Cuisine.table],
-      this.arrResultCallback(res, onComplete)
-    );
-  }
+    const allSubquery = all ? '' : 'LIMIT 12';
 
-  static getListByCuisines(cuisineIds, res, onComplete) {
-    this.query(
-      'SELECT *, group_concat(cuisine_name) AS cuisines FROM ?? AS r INNER JOIN ?? AS rhc ON r.id=restaurant_id INNER JOIN (SELECT id AS cuisine_id, `name` AS cuisine_name FROM ??) AS c ON c.cuisine_id=rhc.cuisine_id WHERE restaurant_id IN(SELECT restaurant_id FROM ?? WHERE cuisine_id IN (?)) GROUP BY restaurant_id',
-      [
-        this.table,
-        this.hasCuisines,
-        Cuisine.table,
-        this.hasCuisines,
-        cuisineIds,
-      ],
-      this.arrResultCallback(res, onComplete)
-    );
-  }
+    const sortSubqueryArr = [
+      sort && `rating ${sort}`,
+      nameSubquery && `r.\`name\` LIKE '${search}%' ${sort}`,
+    ]
+      .filter((val) => val)
+      .join(', ');
 
-  static getListByRating(rating, res, onComplete) {
+    const sortSubquery = sortSubqueryArr && `ORDER BY ${sortSubqueryArr}`;
+
+    const whereSubquery = [cuisineIdsSubquery, nameSubquery]
+      .filter((val) => val)
+      .map((query) => `AND ${query}`)
+      .join('');
+
     this.query(
-      'SELECT *,group_concat(cuisine_name) AS cuisines FROM ?? AS r INNER JOIN ?? AS rhc ON r.id=restaurant_id INNER JOIN (SELECT id AS cuisine_id, `name` AS cuisine_name FROM ??) AS c ON c.cuisine_id=rhc.cuisine_id WHERE rating >= ? GROUP BY restaurant_id ORDER BY rating DESC',
-      [this.table, this.hasCuisines, Cuisine.table, rating],
+      `SELECT r.*, GROUP_CONCAT(c.\`name\` SEPARATOR ', ') AS cuisines FROM ?? AS r LEFT JOIN ?? AS rhc ON r.id=restaurant_id LEFT JOIN ?? AS c ON c.id=cuisine_id WHERE rating >= ? ${whereSubquery} GROUP BY r.id ${sortSubquery} ${allSubquery}`,
+      [this.table, this.hasCuisines, Cuisine.table, rating || 0],
       this.arrResultCallback(res, onComplete)
     );
   }
 
   static getById(id, res, onComplete) {
     this.query(
-      'SELECT *,group_concat(cuisine_name) AS cuisines FROM ?? AS r INNER JOIN ?? AS rhc ON r.id=restaurant_id INNER JOIN (SELECT id AS cuisine_id, `name` AS cuisine_name FROM ??) AS c ON c.cuisine_id=rhc.cuisine_id WHERE ? GROUP BY restaurant_id',
+      "SELECT r.*, GROUP_CONCAT(c.`name` SEPARATOR ', ') AS cuisines FROM ?? AS r LEFT JOIN ?? AS rhc ON r.id=restaurant_id LEFT JOIN ?? AS c ON c.id=cuisine_id WHERE r.? GROUP BY r.id",
       [this.table, this.hasCuisines, Cuisine.table, { id }],
       this.resultCallback(new Restaurant({}), res, onComplete)
     );

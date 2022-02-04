@@ -2,21 +2,20 @@ import Restaurant from '../models/Restaurant.js';
 import { errorResponse } from '../utils.js';
 
 const getList = (req, res) => {
-  const callback = (restaurants) => {
-    res.json({ restaurants });
-  };
+  const { cuisines, all, sort, search } = req.query;
 
-  const { cuisines, all, rating } = req.query;
-
-  if (cuisines)
-    return Restaurant.getListByCuisines(JSON.parse(cuisines), res, callback);
-
-  if (rating)
-    return Restaurant.getListByRating(parseInt(rating), res, callback);
-
-  if (all) return Restaurant.getList(res, callback);
-
-  Restaurant.getListTop(res, callback);
+  const rating = parseInt(req.query.rating);
+  Restaurant.getList(
+    res,
+    cuisines,
+    all,
+    rating,
+    sort,
+    search,
+    (restaurants) => {
+      res.json({ restaurants });
+    }
+  );
 };
 
 const getById = (req, res) => {
