@@ -7,12 +7,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap"
+      integrity="sha512-6Nxlfc3UqWnCN3cupPS/nFsGswX3OLZoanE9DQ6v8awEjTLY4xUh/PZwP62m2jWQEE8yXbHkEE9x+x45xvvVTw=="
+      crossorigin="anonymous"
     />
     <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      integrity="sha512-WGb+AVHWvoI00x2Jkw9hgjnoBa+AfzGLlrcXUB4YZNKphqlqWCyks3Z0ZaOOkK2VUCGs3NAMtX1zf+aQyjhLjQ=="
+      crossorigin="anonymous"
     />
     <link rel="stylesheet" href="/css/materialize.min.css" />
     <link rel="stylesheet" href="/css/style.css" />
@@ -22,33 +26,40 @@
 
     <main class="container">
       <div class="row">
-        <section class="col s12 l6">
+        <section class="col s12 l7">
           <h3>Your Profile</h3>
 
           <form id="editProfileForm" class="card">
             <div class="card-content">
               <div class="file-field input-field">
                 <div class="row valign-wrapper">
-                  <div class="col">
+                  <div class="col s3 m2 l3 xl2">
                     <img
+                      class="circle crop"
                       id="profilePic"
-                      src="/storage/img/user/1.jpg"
-                      alt=""
+                      src=""
+                      alt="Profile Picture"
                       width="64"
                       height="64"
                     />
                   </div>
-                  <div class="file-path-wrapper input-field col s9">
+                  <div
+                    class="file-path-wrapper input-field col right s9 m6 l4 xl6"
+                  >
                     <input class="file-path" type="text" id="profilePicPath" />
                     <label for="profilePicPath">Profile Picture</label>
                   </div>
-                  <div class="col s3">
+                  <div class="col s12 m4 l5 xl4">
                     <div class="cyan lighten-2 btn-small hoverable right">
-                      <span>
+                      <label class="white-text" for="profilePicInput">
                         Upload
                         <i class="material-icons right">upload</i>
-                      </span>
-                      <input type="file" name="profilePic" />
+                      </label>
+                      <input
+                        type="file"
+                        name="profilePic"
+                        id="profilePicInput"
+                      />
                     </div>
                   </div>
                 </div>
@@ -150,12 +161,22 @@
             </div>
             <div class="card-action">
               <button class="waves-effect waves-pink btn-flat" type="submit">
-                sign up
+                update
               </button>
             </div>
           </form>
+
+          <div class="row">
+            <div class="col center">
+              <a
+                id="confirmDelete"
+                class="btn-flat red-text waves-effect waves-red"
+                >Delete</a
+              >
+            </div>
+          </div>
         </section>
-        <section class="col s12 l6">
+        <section class="col s12 l5">
           <h4>Your Reviews</h4>
           <div id="reviews" class="collection"></div>
           <p>You have no reviews yet...</p>
@@ -165,7 +186,16 @@
 
     <footer></footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script
+      src="https://unpkg.com/core-js-bundle@3.20.3/minified.js"
+      integrity="sha512-XqTK31XdMpIVgpwDb5cZIAIzD1nRxmLacWUSz6kYJrnQzhMvLCkpcrbKr0A1nd2Mr6M4iF9Ona51cSlx+h01Ug=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
+      integrity="sha512-NiWqa2rceHnN3Z5j6mSAvbwwg3tiwVNxiAQaaSMSXnRRDh5C2mk/+sKQRw8qjV1vN4nf8iK2a0b048PnHbyx+Q=="
+      crossorigin="anonymous"
+    ></script>
 
     <script src="/js/dashboard.js"></script>
     <script src="/js/script.js"></script>

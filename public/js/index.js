@@ -10,8 +10,6 @@ function loadComponents() {
   var form = document.querySelector('#filterForm');
 
   form.addEventListener('input', getRestaurants);
-  form.addEventListener('change', getRestaurants);
-  form.addEventListener('submit', getRestaurants);
 }
 
 function getCuisines() {
@@ -31,17 +29,21 @@ function getRestaurants(ev) {
 
   if (form['all']) toggleAllCheckbox(data, form);
 
+  // console.log(Array.from(new FormData(form).entries()));
+
   var url = new URL('/api/restaurants', window.location.origin);
 
-  Array.from(data.keys()).forEach((key) => {
-    url.searchParams.set(key, data.get(key));
+  window.form = form;
+
+  var jsonData = jsonFormData(form);
+
+  Array.from(Object.entries(jsonData)).forEach((entry) => {
+    url.searchParams.set(entry[0], entry[1]);
   });
 
   return fetch(url)
     .then((res) => res.json())
     .then((body) => {
-      // console.log(body);
-
       return renderRestaurantCards('#restaurants', body.restaurants);
     });
 }
@@ -52,8 +54,8 @@ function toggleAllCheckbox(data, form) {
     form['all'].parentElement.querySelector('button').innerHTML = 'View More';
     return;
   }
-  form['all'].parentElement.querySelector('button').innerHTML = 'View Less';
   form['all'].value = '';
+  form['all'].parentElement.querySelector('button').innerHTML = 'View Less';
 }
 
 function contentToggle(ev) {

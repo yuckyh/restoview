@@ -1,6 +1,6 @@
 import Cuisine from './Cuisine.js';
 import Model from './Model.js';
-import mysql from 'mysql';
+import mysql from 'mysql2';
 
 export default class Restaurant extends Model {
   static table = 'restoview_cdev_dbav.restaurants';
@@ -23,10 +23,7 @@ export default class Restaurant extends Model {
   }
 
   parse() {
-    delete this.cuisineName;
-    delete this.restaurantId;
-    delete this.cuisineId;
-    this.cuisinesList = this.cuisines?.split(',');
+    this.cuisinesList = this.cuisines?.split(', ');
   }
 
   static getList(res, cuisineIds, all, rating, sort, search, onComplete) {
@@ -36,6 +33,8 @@ export default class Restaurant extends Model {
         'restaurant_id IN(SELECT restaurant_id FROM ?? WHERE cuisine_id IN (?))',
         [this.hasCuisines, cuisineIds]
       );
+
+    console.log(cuisineIds, cuisineIdsSubquery);
     const nameSubquery =
       search && mysql.format('r.`name` LIKE ?', [`%${search}%`]);
 

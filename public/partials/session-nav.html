@@ -2,6 +2,7 @@
   <div class="user-view">
     <div class="background">
       <img
+        alt="Profile Banner"
         class="darken-img"
         width="300"
         height="160"
@@ -10,19 +11,16 @@
     </div>
     <a href="/dashboard"
       ><img
+        alt="Profile Picture"
         width="64"
         height="64"
-        class="circle"
+        class="circle crop"
         src="/storage/img/user/{{ id }}.jpg"
     /></a>
     <a href="/dashboard"
-      ><span class="white-text name"
-        >{{ firstName }} {{ lastName }}</span
-      ></a
+      ><span class="white-text name">{{ firstName }} {{ lastName }}</span></a
     >
-    <a href="/dashboard"
-      ><span class="white-text email">{{ email }}</span></a
-    >
+    <a href="/dashboard"><span class="white-text email">{{ email }}</span></a>
   </div>
 </li>
 <li>

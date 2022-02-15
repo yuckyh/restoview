@@ -6,6 +6,14 @@ body {
 
 body > footer {
   margin-top: auto;
+  background-image: linear-gradient(
+    90deg,
+    #2b4141ff,
+    #0eb1d2ff,
+    #34e4eaff,
+    #8ab9b5ff,
+    #896279ff
+  );
 }
 
 .capitalize {
@@ -51,6 +59,10 @@ nav.black-text .breadcrumb:last-child {
   filter: brightness(75%);
 }
 
+.crop {
+  object-fit: cover;
+}
+
 .collection .collection-item.no-avatar {
   padding-left: 20px;
 }
@@ -71,6 +83,12 @@ nav.black-text .breadcrumb:last-child {
 .row.valign-wrapper .col {
   margin-top: auto;
   margin-bottom: auto;
+}
+
+.row .col.left {
+  float: none !important;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .row .col.right {
@@ -103,13 +121,13 @@ form.card .card-action {
 
 #sortContent .row *,
 #filterContent .row * {
-  height: 0;
   margin: 0;
   transition: all ease-in-out 300ms;
 }
 
 #sortContent .row,
 #filterContent .row {
+  height: 0;
   opacity: 0;
   margin-bottom: 0;
   transition: all ease-in-out 300ms;
@@ -117,6 +135,7 @@ form.card .card-action {
 
 #sortContent.visible .row,
 #filterContent.visible .row {
+  height: auto;
   opacity: 1;
-  margin-bottom: 45px;
+  margin-bottom: 20px;
 }

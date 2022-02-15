@@ -50,6 +50,14 @@ function refreshSession() {
 
 // Util functions
 
+function reloadImage(url) {
+  return fetch(url, { cache: 'reload', mode: 'no-cors' }).then(() =>
+    document.body
+      .querySelectorAll(`img[src='${url}']`)
+      .forEach((img) => (img.src = url))
+  );
+}
+
 function checkURL(session) {
   var location = new URL(window.location).pathname;
   if (!session && location === '/dashboard') {
@@ -69,24 +77,23 @@ function includeHeader(session) {
   var header = document.querySelector('header');
   header.classList.toggle('navbar-fixed', true);
 
-  window.addEventListener('scroll', (ev) => {
-    var navClasses = header.querySelector('nav').classList;
-    if (scrollY < header.scrollHeight) {
-      navClasses.toggle('white', true);
-      navClasses.toggle('black-text', true);
-      navClasses.toggle('z-depth-0', true);
-      return;
-    }
-    navClasses.toggle('white', false);
-    navClasses.toggle('black-text', false);
-    navClasses.toggle('z-depth-0', false);
-  });
-
   header.innerHTML = '';
   return getPartial('/header', (rawHeader) =>
-    parseHeaderTemplate(rawHeader, session).then(
-      (headerHTML) => (header.innerHTML = headerHTML)
-    )
+    parseHeaderTemplate(rawHeader, session).then((headerHTML) => {
+      header.innerHTML = headerHTML;
+      window.addEventListener('scroll', (ev) => {
+        var navClasses = header.querySelector('nav').classList;
+        if (scrollY < header.scrollHeight) {
+          navClasses.toggle('white', true);
+          navClasses.toggle('black-text', true);
+          navClasses.toggle('z-depth-0', true);
+          return;
+        }
+        navClasses.toggle('white', false);
+        navClasses.toggle('black-text', false);
+        navClasses.toggle('z-depth-0', false);
+      });
+    })
   );
 }
 
@@ -140,7 +147,10 @@ function parseHeaderTemplate(html, session) {
 }
 
 function parseHandlebars(html, data, depth) {
-  if (data === null || data === undefined) return html;
+  if (data === null || data === undefined) {
+    var key = depth.replace('.', '');
+    return html.replaceAll(`{{ ${key} }}`, `There are no ${key}.`);
+  }
 
   Object.keys(data).forEach((key) => {
     depth = depth || '';
@@ -155,14 +165,27 @@ function parseHandlebars(html, data, depth) {
 
 function jsonFormData(form) {
   var data = {};
+  var prevKey;
   for (let entry of new FormData(form).entries()) {
-    if (!isNaN(parseInt(entry[1]))) {
-      data[entry[0]] = parseInt(entry[1]);
-      continue;
+    entry[1] = tryParseInt(entry[1]);
+    if (prevKey === entry[0]) {
+      if (!data[entry[0]].length) {
+        var existingValue = data[entry[0]];
+        data[entry[0]] = [existingValue, entry[1]];
+      } else {
+        data[entry[0]].push(entry[1]);
+      }
+    } else {
+      data[entry[0]] = entry[1];
     }
-    data[entry[0]] = entry[1];
+    prevKey = entry[0];
   }
+
   return data;
+}
+
+function tryParseInt(val) {
+  return isNaN(parseInt(val)) ? val : parseInt(val);
 }
 
 function updateRatingInput(ev) {

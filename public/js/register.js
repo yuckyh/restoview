@@ -1,10 +1,10 @@
 function loadComponents(session) {
   document
     .querySelector('#registerForm')
-    .addEventListener('submit', formRegister);
+    .addEventListener('submit', formUpdate);
 }
 
-function formRegister(ev) {
+function formUpdate(ev) {
   ev.preventDefault();
 
   if (ev.target.dataset.active) return;

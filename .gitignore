@@ -1,4 +1,6 @@
+.vscode
 database
 node_modules
 .env*
 storage
+*.session.sql

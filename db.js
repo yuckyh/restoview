@@ -1,4 +1,4 @@
-import { createConnection } from 'mysql';
+import { createConnection } from 'mysql2';
 // import pg from 'pg';
 
 const initDB = async () => {

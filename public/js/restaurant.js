@@ -13,9 +13,9 @@ function getRestaurant() {
 
         console.log(data.restaurant);
 
-        restaurantDetails.style.opacity = 1;
-
         restaurantDetails.innerHTML = parseHandlebars(html, data.restaurant);
+
+        restaurantDetails.style.opacity = 1;
 
         document.querySelector('nav .breadcrumb:last-child').innerHTML =
           data.restaurant.name;
@@ -63,16 +63,16 @@ var loadSessionComponents = (session, restaurantId) => {
 
   var action = matchingReview.length ? 'edit' : 'add';
 
-  var formModal = fetchFormModal(action, session, restaurantId);
+  var renderModal = renderFormModal(action, session, restaurantId);
 
   if (action === 'edit')
     return Promise.all([
-      formModal,
-      fetchButtons(matchingReview[0]),
-      fetchDeleteModal(restaurantId),
+      renderModal,
+      renderButtons(matchingReview[0]),
+      renderDeleteModal(restaurantId),
     ]);
 
-  return Promise.all([formModal, fetchButton()]);
+  return Promise.all([renderModal, renderButton()]);
 };
 
 function formAddReview(ev, restaurantId) {
@@ -129,10 +129,11 @@ function renderReviewListItems(selector, reviews) {
   list.style.opacity = 1;
   list.innerHTML = '';
 
+  list.parentElement.querySelector('p').innerHTML = 'There are no reviews yet...'
+
   if (!reviews.length) return;
 
-  list.parentElement.querySelector('p') &&
-    list.parentElement.querySelector('p').remove();
+    list.parentElement.querySelector('p').innerHTML = '';
 
   return getPartial('/review-list-item', (html) => {
     return Promise.all(reviews.map((data) => getUser(data.userId))).then(

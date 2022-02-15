@@ -5,9 +5,10 @@ const getList = (req, res) => {
   const { cuisines, all, sort, search } = req.query;
 
   const rating = parseInt(req.query.rating);
+  const cuisineIds = cuisines && JSON.parse(`[${cuisines}]`);
   Restaurant.getList(
     res,
-    cuisines,
+    cuisineIds,
     all,
     rating,
     sort,

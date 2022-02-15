@@ -119,7 +119,7 @@ const create = (req, res, next) => {
     return errorResponse(res, 400, 'Minimum 8 characters password');
 
   User.create(user, res, (user) => {
-    uploadImage(`../storage/img/user/${user.id}.jpg`, req);
+    uploadImage(`./storage/img/user/${user.id}.jpg`, req);
 
     const autoExpire = 1;
 
@@ -137,7 +137,7 @@ const setDetailsById = (req, res) => {
   const id = req.signedCookies.session.userId;
 
   User.setDetailsById(id, req.body, res, (user) => {
-    uploadImage(`../storage/img/user/${id}.jpg`, req);
+    uploadImage(`./storage/img/user/${id}.jpg`, req);
 
     res.json({ user });
   });
@@ -169,7 +169,7 @@ const deleteById = (req, res) => {
   const id = req.signedCookies.session.userId;
 
   try {
-    fs.unlinkSync(`../storage/img/user/${id}.jpg`);
+    fs.unlinkSync(`./storage/img/user/${id}.jpg`);
   } catch (e) {
     console.error(e);
   }
