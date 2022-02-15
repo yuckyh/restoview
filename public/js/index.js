@@ -29,8 +29,6 @@ function getRestaurants(ev) {
 
   if (form['all']) toggleAllCheckbox(data, form);
 
-  // console.log(Array.from(new FormData(form).entries()));
-
   var url = new URL('/api/restaurants', window.location.origin);
 
   window.form = form;

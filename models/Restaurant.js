@@ -34,7 +34,6 @@ export default class Restaurant extends Model {
         [this.hasCuisines, cuisineIds]
       );
 
-    console.log(cuisineIds, cuisineIdsSubquery);
     const nameSubquery =
       search && mysql.format('r.`name` LIKE ?', [`%${search}%`]);
 
